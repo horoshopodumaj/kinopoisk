@@ -1,0 +1,22 @@
+{
+  "name": "kinopoisk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/horoshopodumaj/kinopoisk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/horoshopodumaj/kinopoisk/issues"
+  },
+  "homepage": "https://github.com/horoshopodumaj/kinopoisk#readme",
+  "dependencies": {
+    "bootstrap": "^5.2.0"
+  }
+}
