@@ -16,16 +16,18 @@ function requestApi(method, url) {
     request.open(method, url);
     request.send();
     request.addEventListener("readystatechange", () => {
-        if (request.readyState !== 4) return;
+        if (request.readyState !== 4) {
+            movie.innerHTML = "Загрузка";
+            return;
+        }
 
         if (request.status !== 200) {
+            movie.innerHTML = "Ooops, что-то пошло не так!";
             console.log("error" + request.status);
             return;
         }
 
         let output = JSON.parse(request.responseText);
-
-        console.log(output);
         let inner = "";
 
         output.results.forEach(function (item) {
