@@ -1,4 +1,5 @@
 let searchForm = document.querySelector("#search-form");
+let movie = document.querySelector("#movies");
 
 function apiSearch(event) {
     event.preventDefault();
@@ -14,4 +15,26 @@ function requestApi(method, url) {
     let request = new XMLHttpRequest();
     request.open(method, url);
     request.send();
+    request.addEventListener("readystatechange", () => {
+        if (request.readyState !== 4) return;
+
+        if (request.status !== 200) {
+            console.log("error" + request.status);
+            return;
+        }
+
+        let output = JSON.parse(request.responseText);
+
+        console.log(output);
+        let inner = "";
+
+        output.results.forEach(function (item) {
+            let nameItem = item.name || item.title;
+            let releaseDate = item.release_date || item.first_air_date;
+
+            inner += `<div class='col-12 col-md-4 col-xl-3'>${nameItem} <div> Дата выхода: ${releaseDate} </div></div>`;
+        });
+
+        movie.innerHTML = inner;
+    });
 }
