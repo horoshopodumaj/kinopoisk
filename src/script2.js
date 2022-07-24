@@ -81,6 +81,10 @@ function showFullInfo() {
         })
         .then(function (output) {
             console.log(output);
+            let genres = [];
+            output.genres.forEach((item) => {
+                genres.push(item.name);
+            });
             let poster = output.poster_path
                 ? urlPoster + output.poster_path
                 : "./img/no_poster.jpg";
@@ -111,6 +115,7 @@ function showFullInfo() {
                         ? `<p>Вышло ${output.number_of_seasons} сезон(а), в последнем сезоне вышло ${output.last_episode_to_air.episode_number} серий.</p>`
                         : ""
                 }
+                <p>Жанры: ${genres}</p>
             </div>
             `;
         })
