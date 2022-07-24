@@ -5,6 +5,11 @@ let urlPoster = "https://image.tmdb.org/t/p/w500";
 function apiSearch(event) {
     event.preventDefault();
     let searchText = document.querySelector(".form-control").value;
+
+    if (searchText.trim().length === 0) {
+        movie.innerHTML = `<h2 class='col-12 text-center text-danger item'>Неверный запрос</h2>`;
+        return;
+    }
     let server = `https://api.themoviedb.org/3/search/multi?api_key=a11a1a6a5a534565f99c09241f77ff27&language=ru&query=${searchText}`;
     movie.innerHTML = "<div class='spinner'></div>";
 
