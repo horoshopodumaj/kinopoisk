@@ -6,7 +6,7 @@ function apiSearch(event) {
     event.preventDefault();
     let searchText = document.querySelector(".form-control").value;
     let server = `https://api.themoviedb.org/3/search/multi?api_key=a11a1a6a5a534565f99c09241f77ff27&language=ru&query=${searchText}`;
-    movie.innerHTML = "Загрузка";
+    movie.innerHTML = "<div class='spinner'></div>";
 
     fetch(server)
         .then(function (value) {
@@ -25,8 +25,8 @@ function apiSearch(event) {
                     ? urlPoster + item.poster_path
                     : "./img/no_poster.jpg";
                 inner += `
-                <div class='col-12 col-md-4 col-xl-3 item'>
-                <img src=${poster} alt='${nameItem}'>
+                <div class='col-12 col-md-6 col-xl-3 item'>
+                <img src=${poster} class='img_poster' alt='${nameItem}'>
                     <h5>${nameItem}</h5>
                     <div>Дата выхода: ${releaseDate} </div>
                 </div>`;
