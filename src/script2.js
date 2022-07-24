@@ -27,7 +27,6 @@ function apiSearch(event) {
             }
             output.results.forEach(function (item) {
                 let nameItem = item.name || item.title;
-                let releaseDate = item.release_date || item.first_air_date;
                 let poster = item.poster_path
                     ? urlPoster + item.poster_path
                     : "./img/no_poster.jpg";
@@ -39,7 +38,6 @@ function apiSearch(event) {
                 <div class='col-12 col-md-6 col-xl-3 item'>
                 <img src=${poster} class='img_poster' alt='${nameItem}' ${dataInfo}>
                     <h5>${nameItem}</h5>
-                    <div>Дата выхода: ${releaseDate} </div>
                 </div>`;
             });
 
@@ -64,7 +62,62 @@ function addEventMedia() {
 }
 
 function showFullInfo() {
-    console.log(this);
+    let url = "";
+    if (this.dataset.type === "movie") {
+        url = `
+        https://api.themoviedb.org/3/movie/${this.dataset.id}?api_key=a11a1a6a5a534565f99c09241f77ff27&language=ru`;
+    } else if (this.dataset.type === "tv") {
+        url = url = `
+        https://api.themoviedb.org/3/tv/${this.dataset.id}?api_key=a11a1a6a5a534565f99c09241f77ff27&language=ru`;
+    } else {
+        movie.innerHTML = `<h2 class='col-12 text-center text-info item'>Произошла ошибка, повторите позже</h2>`;
+    }
+    fetch(url)
+        .then(function (value) {
+            if (value.status !== 200) {
+                return Promise.reject(new Error(value.status));
+            }
+            return value.json();
+        })
+        .then(function (output) {
+            console.log(output);
+            let poster = output.poster_path
+                ? urlPoster + output.poster_path
+                : "./img/no_poster.jpg";
+            movie.innerHTML = `
+            <h4 class='col-12 text-center text-info'>${
+                output.name || output.title
+            }</h4>
+            <div class='col-4'>
+                <img src=${poster} alt='${output.name || output.title}'>
+                ${
+                    output.homepage
+                        ? `<p class="text-center"><a href='${output.homepage}' target='_blank'>Официальная страница</a></p>`
+                        : ""
+                }
+                ${
+                    output.imdb_id
+                        ? `<p class="text-center"><a href='https://imdb.com/title/${output.imdb_id}' target='_blank'>Cтраница на IMDB.com</a></p>`
+                        : ""
+                }
+            </div>
+            <div class='col-8'>
+                <p>${output.overview}</p>
+                <p>Рейтинг: ${output.vote_average}</p>
+                <p>Статус: ${output.status}</p>
+                <p>Премьера: ${output.release_date || output.first_air_date}</p>
+                ${
+                    output.last_episode_to_air
+                        ? `<p>Вышло ${output.number_of_seasons} сезон(а), в последнем сезоне вышло ${output.last_episode_to_air.episode_number} серий.</p>`
+                        : ""
+                }
+            </div>
+            `;
+        })
+        .catch(function (reason) {
+            movie.innerHTML = "Ooops, что-то пошло не так!";
+            console.log("error: " + reason);
+        });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -84,19 +137,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             output.results.forEach(function (item) {
                 let nameItem = item.name || item.title;
-                let releaseDate = item.release_date || item.first_air_date;
                 let poster = item.poster_path
                     ? urlPoster + item.poster_path
                     : "./img/no_poster.jpg";
 
-                let dataInfo = "";
-                if (item.media_type !== "person")
-                    dataInfo = `data-id = ${item.id} data-type=${item.media_type}`;
+                let dataInfo = `data-id = ${item.id} data-type=${item.media_type}`;
                 inner += `
                 <div class='col-12 col-md-6 col-xl-3 item'>
                 <img src=${poster} class='img_poster' alt='${nameItem}' ${dataInfo}>
                     <h5>${nameItem}</h5>
-                    <div>Дата выхода: ${releaseDate} </div>
                 </div>`;
             });
 
