@@ -22,7 +22,10 @@ function apiSearch(event) {
         })
         .then(function (output) {
             let inner = "";
-            console.log(output);
+            if (output.results.length === 0) {
+                inner = `<h2 class='col-12 text-center text-info item'>К сожалению, ничего не найдено</h2>`;
+            }
+            console.log(output.results.length);
             output.results.forEach(function (item) {
                 let nameItem = item.name || item.title;
                 let releaseDate = item.release_date || item.first_air_date;
