@@ -17,14 +17,16 @@ function apiSearch(event) {
         })
         .then(function (output) {
             let inner = "";
-
+            console.log(output);
             output.results.forEach(function (item) {
                 let nameItem = item.name || item.title;
                 let releaseDate = item.release_date || item.first_air_date;
-
+                let poster = item.poster_path
+                    ? urlPoster + item.poster_path
+                    : "./img/no_poster.jpg";
                 inner += `
                 <div class='col-12 col-md-4 col-xl-3 item'>
-                <img src='${urlPoster + item.poster_path}' alt='${nameItem}'>
+                <img src=${poster} alt='${nameItem}'>
                     <h5>${nameItem}</h5>
                     <div>Дата выхода: ${releaseDate} </div>
                 </div>`;
