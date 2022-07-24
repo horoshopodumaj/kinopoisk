@@ -25,22 +25,27 @@ function apiSearch(event) {
             if (output.results.length === 0) {
                 inner = `<h2 class='col-12 text-center text-info item'>К сожалению, ничего не найдено</h2>`;
             }
-            console.log(output.results.length);
             output.results.forEach(function (item) {
                 let nameItem = item.name || item.title;
                 let releaseDate = item.release_date || item.first_air_date;
                 let poster = item.poster_path
                     ? urlPoster + item.poster_path
                     : "./img/no_poster.jpg";
+
+                let dataInfo = "";
+                if (item.media_type !== "person")
+                    dataInfo = `data-id = ${item.id} data-type=${item.media_type}`;
                 inner += `
                 <div class='col-12 col-md-6 col-xl-3 item'>
-                <img src=${poster} class='img_poster' alt='${nameItem}'>
+                <img src=${poster} class='img_poster' alt='${nameItem}' ${dataInfo}>
                     <h5>${nameItem}</h5>
                     <div>Дата выхода: ${releaseDate} </div>
                 </div>`;
             });
 
             movie.innerHTML = inner;
+
+            addEventMedia();
         })
         .catch(function (reason) {
             movie.innerHTML = "Ooops, что-то пошло не так!";
@@ -49,3 +54,15 @@ function apiSearch(event) {
 }
 
 searchForm.addEventListener("submit", apiSearch);
+
+function addEventMedia() {
+    let media = movie.querySelectorAll("[data-id]");
+    media.forEach(function (elem) {
+        elem.style.cursor = "pointer";
+        elem.addEventListener("click", showFullInfo);
+    });
+}
+
+function showFullInfo() {
+    console.log(this);
+}
