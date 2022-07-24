@@ -1,5 +1,6 @@
 let searchForm = document.querySelector("#search-form");
 let movie = document.querySelector("#movies");
+let urlPoster = "https://image.tmdb.org/t/p/w500";
 
 function apiSearch(event) {
     event.preventDefault();
@@ -21,7 +22,12 @@ function apiSearch(event) {
                 let nameItem = item.name || item.title;
                 let releaseDate = item.release_date || item.first_air_date;
 
-                inner += `<div class='col-12 col-md-4 col-xl-3'>${nameItem} <div> Дата выхода: ${releaseDate} </div></div>`;
+                inner += `
+                <div class='col-12 col-md-4 col-xl-3 item'>
+                <img src='${urlPoster + item.poster_path}' alt='${nameItem}'>
+                    <h5>${nameItem}</h5>
+                    <div>Дата выхода: ${releaseDate} </div>
+                </div>`;
             });
 
             movie.innerHTML = inner;
