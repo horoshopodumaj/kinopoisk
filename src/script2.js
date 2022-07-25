@@ -183,7 +183,6 @@ function getVideo(type, id) {
             return value.json();
         })
         .then((output) => {
-            console.log(output);
             let videoFrame = `<h5 class='col-12 text-info'>Трейлеры</h5>`;
 
             if (output.results.length === 0) {
