@@ -184,7 +184,11 @@ function getVideo(type, id) {
         })
         .then((output) => {
             console.log(output);
-            let videoFrame = `<h5 class='col-12 text-info'>Видео</h5>`;
+            let videoFrame = `<h5 class='col-12 text-info'>Трейлеры</h5>`;
+
+            if (output.results.length === 0) {
+                videoFrame = `<p class='col-12'>К сожалению видео отсутствуют</p>`;
+            }
             output.results.forEach((item) => {
                 videoFrame += `<iframe width="560" height="315" src="https://www.youtube.com/embed/${item.key}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             });
