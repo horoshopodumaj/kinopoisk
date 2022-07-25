@@ -67,11 +67,14 @@ function showFullInfo() {
         url = `
         https://api.themoviedb.org/3/movie/${this.dataset.id}?api_key=a11a1a6a5a534565f99c09241f77ff27&language=ru`;
     } else if (this.dataset.type === "tv") {
-        url = url = `
+        url = `
         https://api.themoviedb.org/3/tv/${this.dataset.id}?api_key=a11a1a6a5a534565f99c09241f77ff27&language=ru`;
     } else {
         movie.innerHTML = `<h2 class='col-12 text-center text-info item'>Произошла ошибка, повторите позже</h2>`;
     }
+    let typeMedia = this.dataset.type;
+    let idMedia = this.dataset.id;
+
     fetch(url)
         .then(function (value) {
             if (value.status !== 200) {
@@ -80,7 +83,6 @@ function showFullInfo() {
             return value.json();
         })
         .then(function (output) {
-            console.log(output);
             let genres = [];
             output.genres.forEach((item) => {
                 genres.push(item.name);
@@ -116,8 +118,13 @@ function showFullInfo() {
                         : ""
                 }
                 <p>Жанры: ${genres}</p>
+
+                <br>
+                <div class='youtube'></div>
             </div>
             `;
+
+            getVideo(typeMedia, idMedia);
         })
         .catch(function (reason) {
             movie.innerHTML = "Ooops, что-то пошло не так!";
@@ -136,9 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return value.json();
         })
         .then(function (output) {
-            let inner = `<h4 class='col-12 text-center text-info item'>Популярное за неделю</h2>`;
+            let inner = `<h4 class='col-12 text-center text-info item'>Популярное за неделю</h4>`;
             if (output.results.length === 0) {
-                inner = `<h2 class='col-12 text-center text-info item'>К сожалению, ничего не найдено</h4>`;
+                inner = `<h2 class='col-12 text-center text-info item'>К сожалению, ничего не найдено</h2>`;
             }
             output.results.forEach(function (item) {
                 let nameItem = item.name || item.title;
@@ -163,3 +170,28 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("error: " + reason);
         });
 });
+
+function getVideo(type, id) {
+    let youtube = movie.querySelector(".youtube");
+    fetch(
+        `https://api.themoviedb.org/3/${type}/${id}/videos?api_key=a11a1a6a5a534565f99c09241f77ff27&language=ru`
+    )
+        .then((value) => {
+            if (value.status !== 200) {
+                return Promise.reject(new Error(value.status));
+            }
+            return value.json();
+        })
+        .then((output) => {
+            console.log(output);
+            let videoFrame = `<h5 class='col-12 text-info'>Видео</h5>`;
+            output.results.forEach((item) => {
+                videoFrame += `<iframe width="560" height="315" src="https://www.youtube.com/embed/${item.key}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            });
+            youtube.innerHTML = videoFrame;
+        })
+        .catch((reason) => {
+            youtube.innerHTML = "Видео отсутствует";
+            console.log("error: " + reason);
+        });
+}
